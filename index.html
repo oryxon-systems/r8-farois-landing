@@ -566,6 +566,39 @@
     });
   }, { threshold: .35 });
   io.observe(beamEl);
+
+  var stage   = beamEl.querySelector('.beam-compare__stage');
+  var layerR8 = beamEl.querySelector('.beam-compare__layer--r8');
+  var handle  = beamEl.querySelector('.beam-compare__handle');
+  if(!handle || !window.matchMedia('(min-width: 768px)').matches) return;
+
+  var setPercent = function(pct){
+    pct = Math.min(100, Math.max(0, pct));
+    layerR8.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+    handle.style.left = pct + '%';
+    handle.setAttribute('aria-valuenow', Math.round(pct));
+  };
+  handle.setAttribute('role', 'slider');
+  handle.setAttribute('aria-valuemin', '0');
+  handle.setAttribute('aria-valuemax', '100');
+  handle.setAttribute('aria-valuenow', '50');
+
+  var dragging = false;
+  handle.addEventListener('pointerdown', function(e){
+    dragging = true;
+    handle.setPointerCapture(e.pointerId);
+  });
+  handle.addEventListener('pointermove', function(e){
+    if(!dragging) return;
+    var rect = stage.getBoundingClientRect();
+    setPercent(((e.clientX - rect.left) / rect.width) * 100);
+  });
+  handle.addEventListener('pointerup', function(){ dragging = false; });
+  handle.addEventListener('keydown', function(e){
+    var current = parseFloat(handle.style.left) || 50;
+    if(e.key === 'ArrowLeft'){ e.preventDefault(); setPercent(current - 5); }
+    if(e.key === 'ArrowRight'){ e.preventDefault(); setPercent(current + 5); }
+  });
 })();
 </script>
 </body>
