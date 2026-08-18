@@ -360,6 +360,29 @@ git commit -m "feat: adiciona glow de cursor nos cards de serviço e diferenciai
 **Interfaces:**
 - Produces: `[data-beam-compare]` element with `.beam-compare__stage`, `.beam-compare__layer--halogen`, `.beam-compare__layer--r8`, `.beam-compare__handle` children. Task 5 consumes these exact class/attribute names to add drag interactivity.
 
+- [ ] **Step 0: Fix swapped image src/alt (discovered during execution)**
+
+Both existing photo assets were wired to the wrong sections: `assets/hero-r8.png` actually contains the halogen-vs-R8 comparison infographic (with baked-in captions and arrows), and `assets/compare-beam.png` actually contains the single moody Audi R8 photo — the reverse of what the hero and Diferenciais sections' `alt` text describe. Confirmed by user 2026-08-18. Fix by swapping which file each `<img>` points to (no new images, no alt-text rewrite beyond what already correctly describes the real content — the existing `alt` strings already match the *other* file, so they stay correct once swapped).
+
+In the hero section, find:
+```html
+    <img src="./assets/hero-r8.png" alt="Audi R8 preto com faróis R8 acesos, cidade ao fundo à noite" class="w-full h-full object-cover opacity-70">
+```
+Replace with:
+```html
+    <img src="./assets/compare-beam.png" alt="Audi R8 preto com faróis R8 acesos, cidade ao fundo à noite" class="w-full h-full object-cover opacity-70">
+```
+
+In the Diferenciais section, find:
+```html
+      <img src="./assets/compare-beam.png" alt="Comparativo entre luz halógena original e iluminação R8, mostrando maior alcance com a R8" class="w-full rounded-sm border border-white/10">
+```
+Replace with:
+```html
+      <img src="./assets/hero-r8.png" alt="Comparativo entre luz halógena original e iluminação R8, mostrando maior alcance com a R8" class="w-full rounded-sm border border-white/10">
+```
+(Step 2 below further modifies this second `<img>` line by adding a `mt-6` class and wrapping it alongside the new SVG diagram — apply this src swap first, then Step 2's replacement.)
+
 - [ ] **Step 1: Add the beam-compare CSS**
 
 Add before the closing `</style>` tag:
@@ -404,10 +427,10 @@ Add before the closing `</style>` tag:
 
 - [ ] **Step 2: Insert the diagram markup above the existing comparison photo**
 
-Find (in the "DIFERENCIAIS TÉCNICOS" section, right column):
+Find (in the "DIFERENCIAIS TÉCNICOS" section, right column — this is the `<img>` already updated by Step 0 to point at `hero-r8.png`):
 ```html
     <div>
-      <img src="./assets/compare-beam.png" alt="Comparativo entre luz halógena original e iluminação R8, mostrando maior alcance com a R8" class="w-full rounded-sm border border-white/10">
+      <img src="./assets/hero-r8.png" alt="Comparativo entre luz halógena original e iluminação R8, mostrando maior alcance com a R8" class="w-full rounded-sm border border-white/10">
       <p class="mt-4 text-xs font-mono text-fog leading-relaxed">
         A fadiga ocular em viagens noturnas vem da falta de contraste e alcance da luz halógena original — luz amarela cansa o cérebro. A R8 resolve isso na raiz.
       </p>
@@ -446,7 +469,7 @@ Replace with:
         <p class="mt-3 text-xs font-mono text-fog">Diagrama ilustrativo — arraste para comparar o alcance.</p>
       </div>
 
-      <img src="./assets/compare-beam.png" alt="Comparativo entre luz halógena original e iluminação R8, mostrando maior alcance com a R8" class="w-full rounded-sm border border-white/10 mt-6">
+      <img src="./assets/hero-r8.png" alt="Comparativo entre luz halógena original e iluminação R8, mostrando maior alcance com a R8" class="w-full rounded-sm border border-white/10 mt-6">
       <p class="mt-4 text-xs font-mono text-fog leading-relaxed">
         A fadiga ocular em viagens noturnas vem da falta de contraste e alcance da luz halógena original — luz amarela cansa o cérebro. A R8 resolve isso na raiz.
       </p>
@@ -510,7 +533,7 @@ chromium --headless --disable-gpu --no-sandbox --window-size=1440,3200 \
   --screenshot=/tmp/r8-task4.png http://localhost:8842/index.html \
   --virtual-time-budget=3000
 ```
-Read `/tmp/r8-task4.png`, scroll visually to the "Diferenciais Técnicos" section. Expected: a dark rectangular diagram box showing two overlapping light-cone triangles (a dimmer narrow one labeled "Halógena", a brighter wider one labeled "R8" with a crisp vertical cutoff edge), with a small circular amber handle at its horizontal center, sitting above the existing `compare-beam.png` photo. Because Chromium headless screenshots capture the full rendered page in one pass (no real scroll-triggered lazy paint), `.is-visible` should already be applied — if the diagram box appears fully transparent/invisible in the screenshot, the IntersectionObserver threshold or `--virtual-time-budget` needs adjusting before proceeding (re-run with `--virtual-time-budget=5000`).
+Read `/tmp/r8-task4.png`, scroll visually to the "Diferenciais Técnicos" section. Expected: a dark rectangular diagram box showing two overlapping light-cone triangles (a dimmer narrow one labeled "Halógena", a brighter wider one labeled "R8" with a crisp vertical cutoff edge), with a small circular amber handle at its horizontal center, sitting above the (now correctly wired) real halogen-vs-R8 comparison photo. Because Chromium headless screenshots capture the full rendered page in one pass (no real scroll-triggered lazy paint), `.is-visible` should already be applied — if the diagram box appears fully transparent/invisible in the screenshot, the IntersectionObserver threshold or `--virtual-time-budget` needs adjusting before proceeding (re-run with `--virtual-time-budget=5000`).
 
 ```bash
 grep -n "beam-compare\|IntersectionObserver" index.html | wc -l
