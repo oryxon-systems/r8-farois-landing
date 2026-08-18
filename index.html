@@ -144,6 +144,25 @@
       animation:none !important; opacity:1 !important; transform:none !important; clip-path:none !important;
     }
   }
+
+  /* ---- Glow de cursor: reflexo de farol nos cards ---- */
+  .glow-card{ position:relative; }
+  .glow-card::before{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(240px circle at var(--gx,50%) var(--gy,50%), rgba(255,122,26,.16), transparent 70%);
+    opacity:0; transition:opacity .25s ease;
+    pointer-events:none;
+  }
+  .glow-card:hover::before,
+  .glow-card:focus-within::before{ opacity:1; }
+
+  @media (prefers-reduced-motion: reduce){
+    .glow-card::before{ transition:none; }
+  }
+  @media (hover:none){
+    .glow-card::before{ display:none; }
+  }
 </style>
 </head>
 
@@ -270,7 +289,7 @@
 
     <div class="grid md:grid-cols-3 gap-px bg-white/10">
       <!-- Card 1 -->
-      <div class="bg-panel p-8 md:p-9 flex flex-col">
+      <div class="glow-card bg-panel p-8 md:p-9 flex flex-col">
         <span class="font-mono text-xs text-amber">01</span>
         <svg class="w-9 h-9 mt-5 text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l4-2 5 1 5-2 4 1M6 15l12-1M4 9c2-2 12-4 16 0"/><circle cx="17" cy="9" r="1" fill="currentColor" stroke="none"/></svg>
         <h3 class="font-display font-700 text-xl text-bone mt-5">Retrofit &amp; Personalização</h3>
@@ -279,7 +298,7 @@
         </p>
       </div>
       <!-- Card 2 -->
-      <div class="bg-panel p-8 md:p-9 flex flex-col">
+      <div class="glow-card bg-panel p-8 md:p-9 flex flex-col">
         <span class="font-mono text-xs text-amber">02</span>
         <svg class="w-9 h-9 mt-5 text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 13h11M14 13l3-3M14 13l3 3M17 6v14"/></svg>
         <h3 class="font-display font-700 text-xl text-bone mt-5">Upgrade de Iluminação</h3>
@@ -288,7 +307,7 @@
         </p>
       </div>
       <!-- Card 3 -->
-      <div class="bg-panel p-8 md:p-9 flex flex-col">
+      <div class="glow-card bg-panel p-8 md:p-9 flex flex-col">
         <span class="font-mono text-xs text-amber">03</span>
         <svg class="w-9 h-9 mt-5 text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 3v9l6-3"/></svg>
         <h3 class="font-display font-700 text-xl text-bone mt-5">Restauração &amp; Manutenção</h3>
@@ -317,21 +336,21 @@
       </h2>
 
       <div class="mt-10 space-y-7">
-        <div class="flex gap-4">
+        <div class="glow-card flex gap-4 p-3 -m-3">
           <span class="font-mono text-amber text-sm mt-1">→</span>
           <div>
             <h3 class="font-display font-600 text-lg text-bone">Instalação Plug &amp; Play</h3>
             <p class="text-sm text-fog mt-1">Sem cortar chicote, sem solda improvisada. Sua garantia de fábrica permanece intacta.</p>
           </div>
         </div>
-        <div class="flex gap-4">
+        <div class="glow-card flex gap-4 p-3 -m-3">
           <span class="font-mono text-amber text-sm mt-1">→</span>
           <div>
             <h3 class="font-display font-600 text-lg text-bone">Linha de corte perfeita</h3>
             <p class="text-sm text-fog mt-1">Alinhamento óptico calibrado: alcance máximo sem ofuscar quem vem no sentido contrário.</p>
           </div>
         </div>
-        <div class="flex gap-4">
+        <div class="glow-card flex gap-4 p-3 -m-3">
           <span class="font-mono text-amber text-sm mt-1">→</span>
           <div>
             <h3 class="font-display font-600 text-lg text-bone">Vedação e teste de estanqueidade</h3>
@@ -455,5 +474,17 @@
   Orçamento no WhatsApp
 </a>
 
+<script>
+(function(){
+  var cards = document.querySelectorAll('.glow-card');
+  cards.forEach(function(card){
+    card.addEventListener('pointermove', function(e){
+      var r = card.getBoundingClientRect();
+      card.style.setProperty('--gx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--gy', (e.clientY - r.top) + 'px');
+    });
+  });
+})();
+</script>
 </body>
 </html>
