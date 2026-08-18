@@ -92,10 +92,72 @@
   .eyebrow{
     letter-spacing:.28em;
   }
+
+  /* ---- Ignition sequence: hero "acende" no primeiro load da sessão ---- */
+  .hero-ignite-line{
+    position:absolute; left:0; right:0; top:50%;
+    height:2px; opacity:0; transform:scaleX(0) translateY(-50%);
+    transform-origin:left center;
+    background:#ff7a1a;
+    box-shadow:0 0 24px 4px rgba(255,122,26,.9);
+    z-index:5;
+    pointer-events:none;
+  }
+
+  #hero .hero-bg,
+  #hero .hero-content{ opacity:1; }
+
+  html.ignition-play #hero .hero-bg,
+  html.ignition-play #hero .hero-content{ opacity:0; }
+
+  html.ignition-play #hero .hero-ignite-line{
+    animation: ignite-snap .18s steps(1) .15s forwards,
+               ignite-line-fade .4s ease .5s forwards;
+  }
+  html.ignition-play #hero .hero-bg{
+    animation: ignite-bg .9s ease-out .32s forwards;
+  }
+  html.ignition-play #hero .hero-content{
+    animation: ignite-reveal .7s cubic-bezier(.16,.9,.35,1) .38s forwards;
+  }
+
+  @keyframes ignite-snap{
+    from{ transform:scaleX(0) translateY(-50%); opacity:1; }
+    to{ transform:scaleX(1) translateY(-50%); opacity:1; }
+  }
+  @keyframes ignite-line-fade{
+    to{ opacity:0; }
+  }
+  @keyframes ignite-bg{
+    0%{ opacity:0; }
+    100%{ opacity:1; }
+  }
+  @keyframes ignite-reveal{
+    0%{ opacity:0; clip-path: inset(0 0 0 100%); }
+    100%{ opacity:1; clip-path: inset(0 0 0 0%); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html.ignition-play #hero .hero-bg,
+    html.ignition-play #hero .hero-content,
+    html.ignition-play #hero .hero-ignite-line{
+      animation:none !important; opacity:1 !important; transform:none !important; clip-path:none !important;
+    }
+  }
 </style>
 </head>
 
 <body class="bg-void text-bone font-body antialiased">
+<script>
+(function(){
+  var KEY = 'r8-ignition-played';
+  var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduced && !sessionStorage.getItem(KEY)){
+    document.documentElement.classList.add('ignition-play');
+    sessionStorage.setItem(KEY, '1');
+  }
+})();
+</script>
 
 <!-- ============ NAV ============ -->
 <header class="fixed top-0 inset-x-0 z-50 border-b border-white/5 bg-void/80 backdrop-blur-md">
@@ -116,14 +178,16 @@
 <main id="topo">
 
 <!-- ============ HERO ============ -->
-<section class="relative min-h-[100svh] flex items-end pb-24 md:pb-28 pt-28 overflow-hidden bg-void beam-line">
-  <div class="absolute inset-0">
-    <img src="./assets/hero-r8.png" alt="Audi R8 preto com faróis R8 acesos, cidade ao fundo à noite" class="w-full h-full object-cover opacity-70">
+<section id="hero" class="relative min-h-[100svh] flex items-end pb-24 md:pb-28 pt-28 overflow-hidden bg-void beam-line">
+  <div class="hero-ignite-line" aria-hidden="true"></div>
+
+  <div class="hero-bg absolute inset-0">
+    <img src="./assets/compare-beam.png" alt="Audi R8 preto com faróis R8 acesos, cidade ao fundo à noite" class="w-full h-full object-cover opacity-70">
     <div class="absolute inset-0 bg-gradient-to-t from-void via-void/70 to-void/10"></div>
     <div class="absolute inset-0 bg-gradient-to-r from-void/90 via-transparent to-void/40"></div>
   </div>
 
-  <div class="relative max-w-7xl mx-auto px-5 md:px-8 w-full">
+  <div class="hero-content relative max-w-7xl mx-auto px-5 md:px-8 w-full">
     <p class="eyebrow font-mono text-[11px] uppercase text-amber mb-5">Retrofit &amp; Iluminação Veicular</p>
     <h1 class="font-display font-700 leading-[0.95] text-[13vw] sm:text-6xl md:text-7xl lg:text-8xl tracking-tight max-w-4xl">
       O OLHAR QUE<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-amber to-amberd">IMPÕE RESPEITO.</span>
@@ -278,7 +342,7 @@
     </div>
 
     <div>
-      <img src="./assets/compare-beam.png" alt="Comparativo entre luz halógena original e iluminação R8, mostrando maior alcance com a R8" class="w-full rounded-sm border border-white/10">
+      <img src="./assets/hero-r8.png" alt="Comparativo entre luz halógena original e iluminação R8, mostrando maior alcance com a R8" class="w-full rounded-sm border border-white/10">
       <p class="mt-4 text-xs font-mono text-fog leading-relaxed">
         A fadiga ocular em viagens noturnas vem da falta de contraste e alcance da luz halógena original — luz amarela cansa o cérebro. A R8 resolve isso na raiz.
       </p>
