@@ -200,6 +200,19 @@
   @media (prefers-reduced-motion: reduce){
     .beam-compare__stage{ transition:none; }
   }
+
+  /* ---- FAQ: abertura/fechamento suave ---- */
+  details > .faq-panel{
+    display:grid !important;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .3s ease;
+  }
+  details[open] > .faq-panel{ grid-template-rows:1fr; }
+  .faq-panel > p{ overflow:hidden; }
+
+  @media (prefers-reduced-motion: reduce){
+    details > .faq-panel{ transition:none; }
+  }
 </style>
 </head>
 
@@ -449,7 +462,9 @@
           <span class="font-display font-600 text-base md:text-lg text-bone">A instalação da R8 tira a garantia do meu carro?</span>
           <span class="faq-icon shrink-0 text-amber text-2xl leading-none">+</span>
         </summary>
-        <p class="text-sm text-fog mt-3 leading-relaxed pr-8">Não. Todo o processo é feito em regime plug and play, sem cortar chicote original e sem alterações estruturais no veículo. A garantia de fábrica é preservada.</p>
+        <div class="faq-panel">
+          <p class="text-sm text-fog mt-3 leading-relaxed pr-8">Não. Todo o processo é feito em regime plug and play, sem cortar chicote original e sem alterações estruturais no veículo. A garantia de fábrica é preservada.</p>
+        </div>
       </details>
 
       <details class="group py-5">
@@ -457,7 +472,9 @@
           <span class="font-display font-600 text-base md:text-lg text-bone">O farol customizado ofusca outros motoristas?</span>
           <span class="faq-icon shrink-0 text-amber text-2xl leading-none">+</span>
         </summary>
-        <p class="text-sm text-fog mt-3 leading-relaxed pr-8">Não, quando feito corretamente — e é aí que está a diferença da R8. Fazemos o alinhamento técnico da linha de corte (cut-off), garantindo alcance máximo sem prejudicar quem vem no sentido contrário.</p>
+        <div class="faq-panel">
+          <p class="text-sm text-fog mt-3 leading-relaxed pr-8">Não, quando feito corretamente — e é aí que está a diferença da R8. Fazemos o alinhamento técnico da linha de corte (cut-off), garantindo alcance máximo sem prejudicar quem vem no sentido contrário.</p>
+        </div>
       </details>
 
       <details class="group py-5">
@@ -465,7 +482,9 @@
           <span class="font-display font-600 text-base md:text-lg text-bone">Como funciona a garantia da R8 sobre o serviço?</span>
           <span class="faq-icon shrink-0 text-amber text-2xl leading-none">+</span>
         </summary>
-        <p class="text-sm text-fog mt-3 leading-relaxed pr-8">Cada farol passa por teste de estanqueidade e checagem óptica antes da entrega. Garantia de 90 dias sobre mão de obra e vedação.</p>
+        <div class="faq-panel">
+          <p class="text-sm text-fog mt-3 leading-relaxed pr-8">Cada farol passa por teste de estanqueidade e checagem óptica antes da entrega. Garantia de 90 dias sobre mão de obra e vedação.</p>
+        </div>
       </details>
 
       <details class="group py-5">
@@ -473,7 +492,9 @@
           <span class="font-display font-600 text-base md:text-lg text-bone">Meu farol está amarelado ou embaçado. Dá para recuperar?</span>
           <span class="faq-icon shrink-0 text-amber text-2xl leading-none">+</span>
         </summary>
-        <p class="text-sm text-fog mt-3 leading-relaxed pr-8">Na maioria dos casos, sim. Fazemos o tratamento da lente, eliminamos infiltração e devolvemos a clareza original — sem o custo de uma peça nova.</p>
+        <div class="faq-panel">
+          <p class="text-sm text-fog mt-3 leading-relaxed pr-8">Na maioria dos casos, sim. Fazemos o tratamento da lente, eliminamos infiltração e devolvemos a clareza original — sem o custo de uma peça nova.</p>
+        </div>
       </details>
 
       <details class="group py-5">
@@ -481,7 +502,9 @@
           <span class="font-display font-600 text-base md:text-lg text-bone">Quanto tempo demora o serviço?</span>
           <span class="faq-icon shrink-0 text-amber text-2xl leading-none">+</span>
         </summary>
-        <p class="text-sm text-fog mt-3 leading-relaxed pr-8">O prazo varia conforme o tipo de intervenção — upgrade simples, retrofit completo ou restauração. Envie o modelo do seu veículo pelo WhatsApp e receba um prazo estimado no orçamento.</p>
+        <div class="faq-panel">
+          <p class="text-sm text-fog mt-3 leading-relaxed pr-8">O prazo varia conforme o tipo de intervenção — upgrade simples, retrofit completo ou restauração. Envie o modelo do seu veículo pelo WhatsApp e receba um prazo estimado no orçamento.</p>
+        </div>
       </details>
 
     </div>
