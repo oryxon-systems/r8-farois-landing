@@ -1,0 +1,6 @@
+*.md
+audit-output/
+src/
+bin/
+tailwind.config.js
+.gitignore
