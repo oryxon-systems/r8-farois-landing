@@ -16,6 +16,7 @@ Papéis:
 ## Stack e convenções
 - HTML estático + Tailwind CSS. Sem frameworks JS, sem build step novo, sem bibliotecas adicionais sem autorização.
 - JS: vanilla, mínimo, sem dependências externas.
+- Toda classe Tailwind nova exige rebuild do CSS antes da entrega: `./bin/tailwindcss -i src/input.css -o assets/css/tailwind.css --minify` (ver DESIGN.md).
 - Imagens: WebP/AVIF quando possível, sempre com `width`/`height` e `alt` descritivo em PT-BR; `loading="lazy"` abaixo da dobra.
 - Idioma do conteúdo: português do Brasil.
 - Indentação: 2 espaços. Classes Tailwind em ordem lógica (layout → espaçamento → tipografia → cor → estados).
